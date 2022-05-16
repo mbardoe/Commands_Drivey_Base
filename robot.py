@@ -1,16 +1,15 @@
 from wpilib import run, TimedRobot, Joystick
-import math
-from wpimath.controller import PIDController
-from drivetrain import Drivetrain
+from subsytems.drivetrain import Drivetrain
+from RobotContainer import RobotContainer
+import commands2
 
 
-class Robot(TimedRobot):
-    
-    joy1=Joystick(0)
-    
+class Robot(commands2.TimedCommandRobot):
+
     def __init__(self):
         super().__init__()
-        self.drivetrain = Drivetrain()
+        # Instantiate our RobotContainer.
+        self.container = RobotContainer()
 
     def robotInit(self):
         pass
@@ -22,10 +21,7 @@ class Robot(TimedRobot):
         pass
 
     def teleopPeriodic(self):
-        speed=-self.joy1.getRawAxis(1)*.4
-        turn=self.joy1.getRawAxis(4)*.2
-        #print(f"Speed: {speed} Turn: {turn}")
-        self.drivetrain.set(speed+turn, speed-turn)
+        pass
 
     def autonomousInit(self):
         pass
