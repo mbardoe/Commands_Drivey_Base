@@ -1,6 +1,9 @@
 from wpilib import XboxController
 from subsytems.drivetrain import Drivetrain
 from commands2 import RunCommand
+from commands.drivestraight import DriveStraight
+import wpilib
+import math
 
 
 class RobotContainer:
@@ -16,6 +19,26 @@ class RobotContainer:
 
         # Create an instance of the drivetrain subsystem.
         self.robotDrive = Drivetrain()
+
+        # Autonomous routines
+
+        # A simple auto routine that drives forward a specified distance, and then stops.
+        self.simpleAuto = DriveStraight(
+            7 * 12 / (4 * math.pi) * 360, self.robotDrive
+        )
+
+        # A complex auto routine that drives forward, drops a hatch, and then drives backward.
+        # self.complexAuto = ComplexAuto(self.drive, self.hatch)
+
+        # Chooser
+        self.chooser = wpilib.SendableChooser()
+
+        # Add commands to the autonomous command chooser
+        self.chooser.setDefaultOption("Simple Auto", self.simpleAuto)
+        # self.chooser.addOption("Complex Auto", self.complexAuto)
+
+        # Put the chooser on the dashboard
+        wpilib.SmartDashboard.putData("Autonomous", self.chooser)
 
         self.robotDrive.setDefaultCommand(
             RunCommand(

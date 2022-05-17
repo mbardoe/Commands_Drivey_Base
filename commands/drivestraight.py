@@ -3,6 +3,8 @@ from commands2 import PIDCommand
 from wpimath.controller import PIDController
 from subsytems.drivetrain import Drivetrain
 from RobotContainer import RobotContainer
+from constants import movement_K_p, movement_K_I, movement_K_D
+from subsytems.drivetrain import Drivetrain
 
 
 # // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -12,67 +14,17 @@ class DriveStraight(PIDCommand):
     # /**
     # * Creates a new DriveStraight.
     # */
-    def __init__(self, distSetPt: float):
-        super(
-            # // The controller that the command will use
-            PIDController(Constants.PIDConstants.drivekP, Constants.PIDConstants.driveKI,
-                          Constants.PIDConstants.driveKD),
-        // This
-        should
-        return the
-        measurement
-        () -> (drive.getLeftEncoderDistance() + drive.getRightEncoderDistance()) / 2,
-        // This
-        should
-        return the
-        setpoint(can
-        also
-        be
-        a
-        constant)
-        () -> distSetPt,
-        // This
-        uses
-        the
-        output
-        output -> {
-            drive.driveStraight(output, Constants.PIDConstants.ksetPoint);
-        }
-        );
-        addRequirements(drive);
-        drive.resetGryo();
-        drive.resetDrivetrainEncoders();
-        // Use
-        addRequirements()
-        here
-        to
-        declare
-        subsystem
-        dependencies.
-        // Configure
-        additional
-        PID
-        options
-        by
-        calling
-        `getController`
-        here.
-        }
+    def __init__(self, distSetPt: float, drivetrain: Drivetrain):
+        super().__init__(
+            PIDController(movement_K_p, movement_K_I,
+                          movement_K_D),
 
-        // Returns
-        true
-        when
-        the
-        command
-        should
-        end.
-        @ Override
-        public
-        boolean
-        isFinished()
-        {
+            drivetrain.m_left_encoder.getPosition,
 
-    return getController().atSetpoint();
+            distSetPt,
 
-}
-}
+            drivetrain.driveStraight,
+            [drivetrain])
+
+    def isFinished(self):
+        return self.getController().atSetpoint();

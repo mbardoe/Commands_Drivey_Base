@@ -30,3 +30,6 @@ class Drivetrain(commands2.SubsystemBase):
 
     def periodic(self):
         pass
+
+    def driveStraight(self, fwd):
+        self.arcadeDrive(fwd, 0)
