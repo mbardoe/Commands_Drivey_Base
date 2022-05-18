@@ -47,3 +47,6 @@ class Drivetrain(commands2.SubsystemBase):
 
     def driveStraight(self, fwd):
         self.arcadeDrive(fwd, 0)
+
+    def turn(self, rot):
+        self.arcadeDrive(0, rot)
