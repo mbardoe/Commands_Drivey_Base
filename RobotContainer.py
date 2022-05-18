@@ -1,9 +1,9 @@
-from wpilib import XboxController
 from subsytems.drivetrain import Drivetrain
-from commands2 import RunCommand
+import commands2
 from commands.drivestraight import DriveStraight
 import wpilib
 import math
+from commands.defaultDrive import DefaultDrive
 
 
 class RobotContainer:
@@ -15,7 +15,7 @@ class RobotContainer:
 
     def __init__(self):
         # Create the driver's controller.
-        self.driverController = XboxController(0)
+        self.driverController = wpilib.Joystick(0)
 
         # Create an instance of the drivetrain subsystem.
         self.robotDrive = Drivetrain()
@@ -39,13 +39,10 @@ class RobotContainer:
 
         # Put the chooser on the dashboard
         wpilib.SmartDashboard.putData("Autonomous", self.chooser)
+        self.robotDrive.setDefaultCommand(DefaultDrive(self.robotDrive,
+                                                       lambda: -self.driverController.getY(),
+                                                       lambda: self.driverController.getX(),
+                                                       ))
 
-        self.robotDrive.setDefaultCommand(
-            RunCommand(
-                lambda: self.robotDrive.arcadeDrive(
-                    -self.driverController.getRawAxis(1) * 0.5,
-                    self.driverController.getRawAxis(2) * 0.65,
-                ),
-                self.robotDrive,
-            )
-        )
+    def getAutonomousCommand(self) -> commands2.Command:
+        return self.chooser.getSelected()

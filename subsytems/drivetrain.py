@@ -10,8 +10,21 @@ class Drivetrain(commands2.SubsystemBase):
         self.gyro = ctre.PigeonIMU(10)
         self.gyro.setYaw(0, 0)
 
-        self.leftMotors = SpeedControllerGroup(ctre.TalonSRX(0).ctre.VictorSPX(1), ctre.VictorSPX(2))
-        self.rightMotors = SpeedControllerGroup(ctre.TalonSRX(3), ctre.VictorSPX(4), ctre.VictorSPX(5))
+        self.m_left = ctre.WPI_TalonSRX(0)
+        self.m_left_2 = ctre.WPI_VictorSPX(1)
+        self.m_left_3 = ctre.WPI_VictorSPX(2)
+        self.m_right = ctre.WPI_TalonSRX(3)
+        self.m_right_2 = ctre.WPI_VictorSPX(4)
+        self.m_right_3 = ctre.WPI_VictorSPX(5)
+
+        self.m_left_2.follow(self.m_left)
+        self.m_left_3.follow(self.m_left)
+
+        self.m_right_2.follow(self.m_right)
+        self.m_right_3.follow(self.m_right)
+
+        self.leftMotors = SpeedControllerGroup(ctre.WPI_TalonSRX(0), ctre.WPI_VictorSPX(1), ctre.WPI_VictorSPX(2))
+        self.rightMotors = SpeedControllerGroup(ctre.WPI_TalonSRX(3), ctre.WPI_VictorSPX(4), ctre.WPI_VictorSPX(5))
 
         self.m_right_encoder = ctre.CANCoder(9)
         self.m_left_encoder = ctre.CANCoder(11)
@@ -27,6 +40,7 @@ class Drivetrain(commands2.SubsystemBase):
     def arcadeDrive(self, fwd, rot):
         """Drive the robot with standard arcade controls."""
         self.drive.arcadeDrive(fwd, rot)
+        # self.set(fwd-rot, fwd+rot)
 
     def periodic(self):
         pass
